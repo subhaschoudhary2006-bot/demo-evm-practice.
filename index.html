@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#174a36">
+<title>डेमो EVM अभ्यास केंद्र</title>
+<style>
+:root{--green:#174a36;--green2:#24734e;--paper:#f5f7f5;--ink:#17211b;--line:#d7dfd9}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Devanagari",sans-serif;line-height:1.5}
+header{background:var(--green);color:white;padding:22px 16px;text-align:center}header h1{font-size:1.45rem;margin:0 0 5px}header p{margin:0;font-size:.9rem}
+.notice{max-width:900px;margin:14px auto 0;padding:10px 14px;background:#fff4d6;border:1px solid #f0d27b;border-radius:10px;color:#5b4300;font-size:.9rem}
+main{max-width:900px;margin:16px auto;padding:0 12px 30px}.tabs{display:flex;gap:8px;overflow:auto;padding:3px 0 12px}.tab{border:1px solid var(--line);border-radius:999px;background:white;padding:9px 13px;white-space:nowrap;font:inherit}.tab.active{background:var(--green);color:white;border-color:var(--green)}
+.panel{background:white;border:1px solid var(--line);border-radius:15px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px #00000008}.panel h2{font-size:1.15rem;margin:0 0 10px}.muted{color:#5a665e;font-size:.9rem}
+.evm{border:3px solid #245e9b;border-radius:12px;overflow:hidden;background:#eaf2fb}.evmhead{background:#245e9b;color:white;padding:10px;text-align:center;font-weight:700}.candidate{display:grid;grid-template-columns:35px 1fr 50px 56px;gap:8px;align-items:center;padding:10px;border-bottom:1px solid #b8c9dc;color:#15263b}.candidate:last-child{border:0}.symbol{font-size:1.5rem;text-align:center}.vote-btn{height:40px;width:48px;border-radius:8px;border:2px solid #4b5969;background:#fff;box-shadow:inset 0 -3px #d8dde2;cursor:pointer}.vote-btn:disabled{opacity:.6}.lamp{width:15px;height:15px;border-radius:50%;background:#b5c1ce;margin:auto;border:1px solid #8794a2}.lamp.on{background:#20a45b;box-shadow:0 0 0 4px #20a45b24}
+button{cursor:pointer;font:inherit}.primary{background:var(--green2);border:0;color:white;border-radius:10px;padding:11px 15px;font-weight:650}.secondary{background:white;border:1px solid var(--line);border-radius:10px;padding:10px 14px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.status{padding:12px;background:#edf6ef;border-radius:9px;margin-top:12px}.slip{border:1px dashed #64756a;background:#fffdf7;padding:14px;margin-top:12px;border-radius:8px}.hidden{display:none}.question{padding:12px 0;border-bottom:1px solid var(--line)}.question:last-child{border:0}.question label{display:block;padding:8px 10px;border:1px solid var(--line);border-radius:8px;margin:7px 0}.question input{margin-right:8px}footer{text-align:center;padding:18px;color:#59645c;font-size:.8rem}
+@media(min-width:650px){.layout{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;align-items:start}.layout .panel{margin-bottom:0}.candidate{grid-template-columns:40px 1fr 58px 62px}}
+</style>
+</head>
+<body>
+<header><h1>डेमो EVM अभ्यास केंद्र</h1><p>मतदान प्रक्रिया सीखें • मोबाइल पर अभ्यास करें</p></header>
+<div class="notice"><strong>महत्वपूर्ण:</strong> यह स्वतंत्र शैक्षणिक सिमुलेशन है। यह भारत निर्वाचन आयोग की आधिकारिक वेबसाइट या असली EVM नहीं है। यहाँ डाला गया कोई वोट वास्तविक चुनाव में दर्ज नहीं होता।</div>
+<main>
+<nav class="tabs" aria-label="मुख्य अनुभाग">
+<button class="tab active" data-tab="practice">EVM अभ्यास</button><button class="tab" data-tab="guide">मतदान की जानकारी</button><button class="tab" data-tab="quiz">क्विज़</button>
+</nav>
+<section id="practice" class="page">
+<div class="layout">
+<div class="panel">
+<h2>1. डेमो बैलेट यूनिट</h2><p class="muted">नीचे दिए गए काल्पनिक उम्मीदवारों में से केवल एक चुनें। अभ्यास के लिए वास्तविक नाम या पार्टी उपयोग नहीं किए गए हैं।</p>
+<div class="evm"><div class="evmhead">DEMO BALLOT UNIT • अभ्यास मात्र</div>
+<div id="candidates"></div></div>
+<div class="actions"><button class="primary" id="cast" disabled>डेमो वोट दर्ज करें</button><button class="secondary" id="reset">फिर से शुरू करें</button></div>
+<div id="message" class="status" aria-live="polite">शुरू करने के लिए किसी एक उम्मीदवार के सामने बटन दबाएँ।</div>
+</div>
+<div class="panel">
+<h2>2. डेमो VVPAT पर्ची</h2><p class="muted">यह केवल समझाने के लिए बनाई गई नकली पर्ची है। यह वास्तविक VVPAT प्रिंट नहीं है।</p>
+<div id="slip" class="slip">अभी कोई चयन नहीं हुआ है।</div>
+<h2 style="margin-top:18px">3. अभ्यास के चरण</h2><ol><li>उम्मीदवार का नाम और चिह्न पढ़ें।</li><li>उसके सामने बटन दबाएँ।</li><li>अपना चयन जाँचें और “डेमो वोट दर्ज करें” दबाएँ।</li><li>डेमो पुष्टि पढ़ें और चाहें तो नया अभ्यास शुरू करें।</li></ol>
+</div></div>
+</section>
+<section id="guide" class="page hidden">
+<div class="panel"><h2>मतदान प्रक्रिया की सामान्य जानकारी</h2>
+<ol><li>मतदान केंद्र पर अधिकृत मतदान कर्मी मतदाता की पहचान और आवश्यक प्रक्रिया पूरी करते हैं।</li><li>निर्देश मिलने पर मतदाता EVM की बैलेट यूनिट पर उम्मीदवार के नाम और चुनाव चिह्न की पुष्टि करता है।</li><li>मतदाता अपने पसंदीदा उम्मीदवार के सामने संबंधित बटन दबाता है।</li><li>मशीन का संकेत मतदान दर्ज होने की पुष्टि देता है; VVPAT युक्त व्यवस्था में पर्ची निर्धारित खिड़की में थोड़े समय के लिए दिखाई देती है।</li><li>मतदान केंद्र पर तैनात अधिकारियों के निर्देशों का पालन करें। वास्तविक प्रक्रिया और नियमों के लिए निर्वाचन आयोग की आधिकारिक जानकारी देखें।</li></ol>
+<p class="muted">यह सामान्य शैक्षणिक सारांश है, आधिकारिक निर्देशों का विकल्प नहीं।</p><p><a href="https://www.eci.gov.in/" target="_blank" rel="noopener">भारत निर्वाचन आयोग की वेबसाइट खोलें</a></p></div>
+</section>
+<section id="quiz" class="page hidden">
+<div class="panel"><h2>मतदान जागरूकता क्विज़</h2><p class="muted">तीन सवालों के जवाब दें। यह ज्ञान जाँचने के लिए है, राजनीतिक पसंद जानने के लिए नहीं।</p>
+<form id="quizForm">
+<div class="question"><strong>1. डेमो EVM अभ्यास वेबसाइट पर दर्ज चयन क्या असली चुनावी वोट है?</strong>
+<label><input type="radio" name="q1" value="a" required> हाँ, असली वोट है</label><label><input type="radio" name="q1" value="b"> नहीं, यह केवल अभ्यास है</label></div>
+<div class="question"><strong>2. मतदान से पहले उम्मीदवार के बारे में क्या करना चाहिए?</strong>
+<label><input type="radio" name="q2" value="a" required> नाम और चुनाव चिह्न ध्यान से देखना</label><label><input type="radio" name="q2" value="b"> बिना देखे कोई भी बटन दबाना</label></div>
+<div class="question"><strong>3. आधिकारिक चुनाव संबंधी नियम कहाँ जाँचने चाहिए?</strong>
+<label><input type="radio" name="q3" value="a" required> केवल अनजान सोशल मीडिया पोस्ट पर</label><label><input type="radio" name="q3" value="b"> निर्वाचन आयोग की आधिकारिक जानकारी पर</label></div>
+<button class="primary" type="submit">जवाब जाँचें</button> <button class="secondary" type="reset" id="quizReset">दोबारा दें</button></form><div id="quizResult" class="status hidden" aria-live="polite"></div></div>
+</section>
+</main><footer>शैक्षणिक डेमो • किसी वास्तविक मतदाता की जानकारी या राजनीतिक पसंद एकत्र नहीं की जाती।</footer>
+<script>
+const people=[{name:"उम्मीदवार A",symbol:"🌾"},{name:"उम्मीदवार B",symbol:"⭐"},{name:"उम्मीदवार C",symbol:"🌳"},{name:"उम्मीदवार D",symbol:"⚙️"}];
+let selected=-1,cast=false;
+const list=document.getElementById('candidates');
+function renderCandidates(){list.innerHTML='';people.forEach((p,i)=>{const row=document.createElement('div');row.className='candidate';row.innerHTML=`<span>${i+1}</span><span>${p.name}</span><span class="symbol" aria-label="काल्पनिक चिह्न">${p.symbol}</span><span style="display:flex;align-items:center;gap:5px"><span class="lamp" id="lamp${i}"></span><button class="vote-btn" aria-label="${p.name} चुनें" data-index="${i}"></button></span>`;list.appendChild(row)});list.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>choose(Number(b.dataset.index))))}
+function choose(i){if(cast)return;selected=i;people.forEach((_,j)=>document.getElementById('lamp'+j).classList.toggle('on',j===i));document.getElementById('cast').disabled=false;document.getElementById('message').textContent=people[i].name+' चुना गया है। पुष्टि के लिए “डेमो वोट दर्ज करें” दबाएँ।';document.getElementById('slip').innerHTML='<strong>डेमो VVPAT — वास्तविक पर्ची नहीं</strong><hr>काल्पनिक चयन: '+people[i].name+'<br>चिह्न: '+people[i].symbol+'<br><small>यह केवल स्क्रीन पर दिखने वाला अभ्यास है।</small>'}
+document.getElementById('cast').addEventListener('click',()=>{if(selected<0||cast)return;cast=true;document.getElementById('cast').disabled=true;list.querySelectorAll('button').forEach(b=>b.disabled=true);document.getElementById('message').textContent='डेमो अभ्यास पूरा हुआ। '+people[selected].name+' का चयन इस स्क्रीन पर दर्ज माना गया है; वास्तविक चुनावी वोट नहीं है।';document.getElementById('slip').innerHTML='<strong>डेमो पुष्टि</strong><hr>चयन: '+people[selected].name+' '+people[selected].symbol+'<br>स्थिति: अभ्यास पूरा<br><small>यह वास्तविक VVPAT रिकॉर्ड नहीं है।</small>'});
+document.getElementById('reset').addEventListener('click',()=>{selected=-1;cast=false;renderCandidates();document.getElementById('cast').disabled=true;document.getElementById('message').textContent='शुरू करने के लिए किसी एक उम्मीदवार के सामने बटन दबाएँ।';document.getElementById('slip').textContent='अभी कोई चयन नहीं हुआ है।'});
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b===btn));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('hidden',p.id!==btn.dataset.tab))}));
+document.getElementById('quizForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.target);const answers={q1:'b',q2:'a',q3:'b'};let score=0;Object.keys(answers).forEach(k=>{if(f.get(k)===answers[k])score++});const r=document.getElementById('quizResult');r.classList.remove('hidden');r.textContent='आपका स्कोर: '+score+'/3. '+(score===3?'बहुत अच्छा! सभी जवाब सही हैं।':'अच्छा प्रयास। सही जानकारी के लिए ऊपर मतदान की जानकारी वाला भाग पढ़ें और फिर प्रयास करें।')});
+document.getElementById('quizReset').addEventListener('click',()=>{const r=document.getElementById('quizResult');r.classList.add('hidden');r.textContent=''});
+renderCandidates();
+</script></body></html>
